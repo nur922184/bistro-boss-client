@@ -1,17 +1,20 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../../Provider/AuthProvider';
+import { BsCartPlusFill } from 'react-icons/bs';
+import useCart from '../../../Hooks/useCart';
 
 const Navbar = () => {
 
-    const {user, Logout} = useContext(AuthContext)
+    const { user, Logout } = useContext(AuthContext)
+    const [cart] =useCart();
 
-    const handleLogOut = ()=>{
+    const handleLogOut = () => {
         Logout()
-        .then(() => {
-            console.log('Logged out successfully');
-        })
-        .catch(error => console.error(error));
+            .then(() => {
+                console.log('Logged out successfully');
+            })
+            .catch(error => console.error(error));
     }
 
     const NavOptions = <>
@@ -20,12 +23,19 @@ const Navbar = () => {
         <li><NavLink to="/menu">Oue Menu</NavLink></li>
         <li><NavLink to="/order/salad">Order food</NavLink></li>
         <li><NavLink to="/secret">Secret</NavLink></li>
+        <li><NavLink to="/">
+            <button className="btn">
+                <BsCartPlusFill />
+                <div className="badge badge-secondary">+ {cart.length}</div>
+            </button>
+        </NavLink></li>
 
         {
-            user? <>
-            <button onClick={handleLogOut} className='btn btn-ghost '>Logout</button>
-            </>:<>         
-            <li><NavLink to="login">login now</NavLink></li></>
+            user ? <>
+                <button onClick={handleLogOut} className='btn btn-ghost '>Logout</button>
+                {/* <span>{user?.displayName}</span> */}
+            </> : <>
+                <li><NavLink to="login">login now</NavLink></li></>
         }
     </>
 
@@ -50,8 +60,8 @@ const Navbar = () => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                                {NavOptions}
+                            className="menu menu-sm dropdown-content items-center bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                            {NavOptions}
                         </ul>
                     </div>
                     <a className="btn btn-ghost text-xl">Bistro Boss</a>
