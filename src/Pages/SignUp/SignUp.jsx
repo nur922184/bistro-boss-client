@@ -4,9 +4,12 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosSecurePublic from "../../Hooks/useAxiosSecurePublic";
+import SocialLogin from "../../SocilaLogin/SocialLogin";
 
 
 const SignUp = () => {
+    const axiosPublic = useAxiosSecurePublic();
     const {
         register,
         handleSubmit,
@@ -24,16 +27,26 @@ const SignUp = () => {
                 console.log(loggedUser);
                 UpdateUserProfile(data.name, data.PhotoURL)
                     .then(() => {
-                        console.log('user profile info update');
-                        reset();
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: "Your profile update has been success",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        navigate("/")
+                        // crate user entry in the database
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    console.log('user added to the database')
+                                    reset();
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "success",
+                                        title: "Your profile update has been success",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    navigate("/")
+                                }
+                            })
                     })
                     .catch(error => console.log(error))
             })
@@ -92,7 +105,8 @@ const SignUp = () => {
 
                             </div>
                         </form>
-                        <p><small>Already have an account<Link to="/login"></Link> </small></p>
+                        <p className="px-6" ><small>Already have an account<Link to="/login" className="text-blue-500"> login now</Link> </small></p>
+                      <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>
