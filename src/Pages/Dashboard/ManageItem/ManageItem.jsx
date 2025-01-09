@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 
 const ManageItem = () => {
-    const [menu,  refetch] = useMenu();
+    const [menu, , refetch] = useMenu();
     const axiosSecure = useAxiosSecure();
     const handleDeleteItem = (item) => {
         Swal.fire({
@@ -25,11 +25,14 @@ const ManageItem = () => {
                 const res = await axiosSecure.delete(`/menu/${item._id}`);
                 // console.log(res.data);
                 if (res.data.deletedCount > 0) {
-                    refetch()
+                    // refetch to update the ui
+                    refetch();
                     Swal.fire({
-                        title: "Deleted!",
-                        text: `${item.name} has been deleted `,
-                        icon: "success"
+                        position: "top-end",
+                        icon: "success",
+                        title: `${item.name} has been deleted`,
+                        showConfirmButton: false,
+                        timer: 1500
                     });
                 }
 

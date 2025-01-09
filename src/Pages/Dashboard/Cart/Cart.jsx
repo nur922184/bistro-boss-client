@@ -3,6 +3,7 @@ import useCart from '../../../Hooks/useCart';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
     const [cart, refetch] = useCart();
@@ -38,7 +39,11 @@ const Cart = () => {
             <div className='flex justify-evenly mb-24'>
                 <h2 className="text-2xl">Items: {cart.length}</h2>
                 <h2 className="text-2xl">Total Price:{totalPrice}</h2>
+                {cart.length ? <Link to="/dashboard/payment">
                 <button className='btn btn-primary btn-sm'>Pay</button>
+                </Link>:
+                <button disabled className='btn btn-primary btn-sm'>Pay</button>
+                }
             </div>
             <div className="overflow-x-auto">
                 <table className="table">

@@ -16,6 +16,8 @@ import AddItem from "../Pages/Dashboard/AddItem/AddItem";
 import AdminRoute from "./AdminRoute";
 import ManageItem from "../Pages/Dashboard/ManageItem/ManageItem";
 import UpdateItem from "../Pages/Dashboard/UpdateItem/UpdateItem";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentHistory from "../Pages/Dashboard/PaymentHistory/paymentHistory";
 
 
 export const router = createBrowserRouter([
@@ -58,25 +60,39 @@ export const router = createBrowserRouter([
                 path: "cart",
                 element: <Cart></Cart>
             },
+            {
+                path: "payment",
+                element: <Payment></Payment>
+            },
+            {
+                path: "paymentHistory",
+                element: <PaymentHistory></PaymentHistory>
+            },
 
             // admin related
             {
                 path: "users",
-                element:<AdminRoute> <AllUsrs></AllUsrs></AdminRoute>
+                element: <AdminRoute> <AllUsrs></AllUsrs></AdminRoute>
             },
             {
                 path: "manageItems",
-                element:<AdminRoute><ManageItem></ManageItem></AdminRoute>
+                element: <AdminRoute><ManageItem></ManageItem></AdminRoute>
+            },
+            {
+                path: 'updateItem/:id',
+                element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
+                loader: ({ params }) => fetch(`http://localhost:5000/menu/${params.id}`)
+
             },
             {
                 path: "addItems",
                 element: <AdminRoute><AddItem></AddItem></AdminRoute>
             },
-            {
-                path: "updateItem/:id",
-                element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>, 
-                loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
-            },
+            // {
+            //     path: "updateItem/:id",
+            //     element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
+            //     loader: ({ params }) => fetch(`http://localhost:5000/menu/${params.id}`)
+            // },
         ]
     }
 ]);
